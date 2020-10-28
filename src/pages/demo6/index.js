@@ -5,7 +5,7 @@ import {SweepingLight} from "./SweepingLight";
 export default class Demo5 extends React.Component {
 
     componentDidMount() {
-        document.title = '发光墙';
+        document.title = '扫光效果';
         new SweepingLight(this.ID);
     }
 

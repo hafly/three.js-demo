@@ -104,6 +104,10 @@ class Halo {
 
         this.controls.update();
         this.stats.update();
+
+        this.group_wheel.forEach(function (item) {
+            item.rotation.z += 0.02;
+        })
     }
 
     onWindowResize() {

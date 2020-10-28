@@ -5,6 +5,7 @@ import {Earth} from "./Earth";
 export default class Demo2 extends React.Component {
 
     componentDidMount() {
+        document.title = '地球发光特效';
         new Earth(this.ID);
     }
 

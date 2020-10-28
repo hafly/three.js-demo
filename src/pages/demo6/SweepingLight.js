@@ -35,7 +35,7 @@ class SweepingLight {
         this.initLight();
         this.initModel();
         this.initRenderer();
-        // this.initGUI();
+        this.initGUI();
 
         this.bindEvent();
     }
@@ -96,71 +96,11 @@ class SweepingLight {
     }
 
     initGUI() {
-        let self = this;
-        let params = {
-            constant: 1.0,
-            force: 1.4,
-            bs: false,
-            fs: true,
-            nb: false,
-            ab: true,
-            color: "#ffff00"
-        };
-
         let gui = new GUI({autoPlace: false});
         gui.domElement.style.position = 'fixed';
         gui.domElement.style.top = 0;
         gui.domElement.style.right = 0;
         this.container.appendChild(gui.domElement);
-
-        let top = gui.addFolder('Glow Shader Attributes');
-
-        top.add(params, 'constant').min(0.0).max(1.0).step(0.01).name("constant").onChange(function (value) {
-            self.sphereMesh.material.uniforms["constant"].value = value;
-        });
-        top.add(params, 'force').min(0.0).max(6.0).step(0.01).name("force").onChange(function (value) {
-            self.sphereMesh.material.uniforms["force"].value = value
-        });
-        top.addColor(params, 'color').name('Glow Color').onChange(function (value) {
-            self.sphereMesh.material.uniforms.glowColor.value.setHex(value.replace("#", "0x"));
-        });
-        top.open();
-
-        // toggle front side / back side
-        let folder1 = gui.addFolder('Render side');
-        let fsGUI = folder1.add(params, 'fs').name("THREE.FrontSide").listen();
-        fsGUI.onChange(function (value) {
-            if (value) {
-                bsGUI.setValue(false);
-                self.sphereMesh.material.side = THREE.FrontSide;
-            }
-        });
-        let bsGUI = folder1.add(params, 'bs').name("THREE.BackSide").listen();
-        bsGUI.onChange(function (value) {
-            if (value) {
-                fsGUI.setValue(false);
-                self.sphereMesh.material.side = THREE.BackSide;
-            }
-        });
-        folder1.open();
-
-        // toggle normal blending / additive blending
-        let folder2 = gui.addFolder('Blending style');
-        let nbGUI = folder2.add(params, 'nb').name("THREE.NormalBlending").listen();
-        nbGUI.onChange(function (value) {
-            if (value) {
-                abGUI.setValue(false);
-                self.sphereMesh.material.blending = THREE.NormalBlending;
-            }
-        });
-        let abGUI = folder2.add(params, 'ab').name("THREE.AdditiveBlending").listen();
-        abGUI.onChange(function (value) {
-            if (value) {
-                nbGUI.setValue(false);
-                self.sphereMesh.material.blending = THREE.AdditiveBlending;
-            }
-        });
-        folder2.open();
     }
 
     update() {
@@ -176,7 +116,7 @@ class SweepingLight {
         } else if (time < -1.0) {
             this.type = 'add';
         }
-        if (this.type == 'add') {
+        if (this.type === 'add') {
             this.effect.uniforms.time.value += 0.01;
         } else {
             this.effect.uniforms.time.value -= 0.01;

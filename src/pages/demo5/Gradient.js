@@ -25,7 +25,7 @@ class Gradient {
     init() {
         this.initScene();
         this.initCamera();
-        this.initLight();
+        // this.initLight();
         this.initModel();
         this.initRenderer();
         this.initGUI();
@@ -57,9 +57,9 @@ class Gradient {
         let material = new THREE.ShaderMaterial(
             {
                 uniforms: {
-                    constant: {type: "f", value: 1.0},
-                    force: {type: "f", value: 1.4},
-                    glowColor: {type: "c", value: new THREE.Color(0xffff00)}
+                    iColor: {type: 'vec3', value: new THREE.Color('#ffffff')},
+                    iHeight: {type: 'f', value: 50.0},
+                    time: {type: 'f', value: 0.0}
                 },
                 vertexShader: GradientShader.vertexShader,
                 fragmentShader: GradientShader.fragmentShader,
@@ -90,13 +90,8 @@ class Gradient {
     initGUI() {
         let self = this;
         let params = {
-            constant: 1.0,
-            force: 1.4,
-            bs: false,
-            fs: true,
-            nb: false,
-            ab: true,
-            color: "#ffff00"
+            iHeight: 50.0,
+            iColor: "#ffffff"
         };
 
         let gui = new GUI({autoPlace: false});
@@ -107,52 +102,13 @@ class Gradient {
 
         let top = gui.addFolder('Glow Shader Attributes');
 
-        top.add(params, 'constant').min(0.0).max(1.0).step(0.01).name("constant").onChange(function (value) {
-            self.sphereMesh.material.uniforms["constant"].value = value;
+        top.add(params, 'iHeight').min(1).max(100).step(1).name("height").onChange(function (value) {
+            self.sphereMesh.material.uniforms["iHeight"].value = value;
         });
-        top.add(params, 'force').min(0.0).max(6.0).step(0.01).name("force").onChange(function (value) {
-            self.sphereMesh.material.uniforms["force"].value = value
-        });
-        top.addColor(params, 'color').name('Glow Color').onChange(function (value) {
-            self.sphereMesh.material.uniforms.glowColor.value.setHex(value.replace("#", "0x"));
+        top.addColor(params, 'iColor').name('color').onChange(function (value) {
+            self.sphereMesh.material.uniforms['iColor'].value.setHex(value.replace("#", "0x"));
         });
         top.open();
-
-        // toggle front side / back side
-        let folder1 = gui.addFolder('Render side');
-        let fsGUI = folder1.add(params, 'fs').name("THREE.FrontSide").listen();
-        fsGUI.onChange(function (value) {
-            if (value) {
-                bsGUI.setValue(false);
-                self.sphereMesh.material.side = THREE.FrontSide;
-            }
-        });
-        let bsGUI = folder1.add(params, 'bs').name("THREE.BackSide").listen();
-        bsGUI.onChange(function (value) {
-            if (value) {
-                fsGUI.setValue(false);
-                self.sphereMesh.material.side = THREE.BackSide;
-            }
-        });
-        folder1.open();
-
-        // toggle normal blending / additive blending
-        let folder2 = gui.addFolder('Blending style');
-        let nbGUI = folder2.add(params, 'nb').name("THREE.NormalBlending").listen();
-        nbGUI.onChange(function (value) {
-            if (value) {
-                abGUI.setValue(false);
-                self.sphereMesh.material.blending = THREE.NormalBlending;
-            }
-        });
-        let abGUI = folder2.add(params, 'ab').name("THREE.AdditiveBlending").listen();
-        abGUI.onChange(function (value) {
-            if (value) {
-                nbGUI.setValue(false);
-                self.sphereMesh.material.blending = THREE.AdditiveBlending;
-            }
-        });
-        folder2.open();
     }
 
     update() {
@@ -161,6 +117,8 @@ class Gradient {
 
         this.controls.update();
         this.stats.update();
+
+        this.cubeMesh.material.uniforms.time.value += 0.1;
     }
 
     onWindowResize() {
