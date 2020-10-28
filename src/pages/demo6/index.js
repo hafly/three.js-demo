@@ -1,12 +1,12 @@
 import React from 'react';
-import {Glow} from "./Glow";
+import {SweepingLight} from "./SweepingLight";
 
-// Glow Shader
-export default class Demo1 extends React.Component {
+// 扫光效果
+export default class Demo5 extends React.Component {
 
     componentDidMount() {
-        document.title = 'Glow Shader';
-        new Glow(this.ID);
+        document.title = '发光墙';
+        new SweepingLight(this.ID);
     }
 
     render() {

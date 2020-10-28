@@ -1,12 +1,12 @@
 import React from 'react';
-import {Glow} from "./Glow";
+import {Halo} from "./Halo";
 
-// Glow Shader
-export default class Demo1 extends React.Component {
+// Halo
+export default class Demo4 extends React.Component {
 
     componentDidMount() {
-        document.title = 'Glow Shader';
-        new Glow(this.ID);
+        document.title = 'Halo';
+        new Halo(this.ID);
     }
 
     render() {

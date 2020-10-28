@@ -1,12 +1,12 @@
 import React from 'react';
-import {Glow} from "./Glow";
+import {Gradient} from "./Gradient";
 
-// Glow Shader
-export default class Demo1 extends React.Component {
+// 局部辉光测试
+export default class Demo5 extends React.Component {
 
     componentDidMount() {
-        document.title = 'Glow Shader';
-        new Glow(this.ID);
+        document.title = '发光墙';
+        new Gradient(this.ID);
     }
 
     render() {
